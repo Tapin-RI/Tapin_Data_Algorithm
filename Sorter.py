@@ -6,7 +6,7 @@ Developed by: Landon Montecalvo
 import os
 import csv
 
-directory = "D:\Tapin\Tapin_Data_Algorithm"
+directory = "C:\\Users\\ljmon\\OneDrive\\Desktop\\Tapin\\Apps\\Tapin_Algorithm"
 
 tapinCategoriesList = {
     "01": "General Non-Food",
@@ -184,7 +184,7 @@ with open(GetCSV()[0], 'r') as file: # Read data in the .csv file.
             "TEFAP Produce": [0, 0, 0, 0]
         }
 
-        writer.writerow(["Tap-In Category", "Product Ref", "ProductName", "Product Type", "Product Category", "Weight", "Service Fee", "Purchase Cost", "Food Bank Cost/Value"])
+        writer.writerow(["Tap-In Category", "Product Ref", "Product Name", "Product Type", "Product Category", "Weight", "Service Fee", "Purchase Cost", "Food Bank Cost/Value"])
 
         for i in range(0, len(dataRows)):
             formattedRows.append([])
@@ -255,3 +255,82 @@ with open(GetCSV()[0], 'r') as file: # Read data in the .csv file.
 
         grandTotalContents = ["GRAND TOTAL", "", "", "", ""] + [totalWeight, "$" + str(totalServiceFee), "$" + str(totalPurchaseCost), "$" + str(totalValue)]
         writer.writerow(grandTotalContents)
+
+    fileNameSalesforce = "Food Bank Report - " + months[month] + " " + year + " SALESFORCE SHEET" + ".csv"
+
+    with open(directory + "\\" + fileNameSalesforce, "w", newline="") as file:
+        writer = csv.writer(file)
+
+        formattedRows = []
+
+        subtotals = {
+            "General Food": [0, 0, 0, 0],
+            "General Non-Food": [0, 0, 0, 0],
+            "General Produce": [0, 0, 0, 0],
+            "Cleaning Supplies": [0, 0, 0, 0],
+            "Toiletries": [0, 0, 0, 0],
+            "TEFAP Food": [0, 0, 0, 0],
+            "TEFAP Produce": [0, 0, 0, 0]
+        }
+
+        writer.writerow(["Goods Type", "Weight (lb)","Service Fee", "Tap-In Expense ($)", "Value", "Account", "Date Received"])
+
+        for i in range(0, len(dataRows)):
+            formattedRows.append([])
+            
+            formattedRows[i].append(tapinCategories[i])
+            formattedRows[i].append(productRefs[i])
+            formattedRows[i].append(productNames[i])
+            formattedRows[i].append(productTypes[i])
+            formattedRows[i].append(productCategories[i])
+            formattedRows[i].append(productWeights[i])
+            formattedRows[i].append(productServiceFees[i])
+            formattedRows[i].append(productPurchaseCosts[i])
+            formattedRows[i].append(productValues[i])
+
+        formattedRows.sort()
+
+        for row in formattedRows:
+            tempCategory = row[0]
+            subtotals[tempCategory][0] += float(RemoveCharacters(row[5]))
+            subtotals[tempCategory][1] += float(RemoveCharacters(row[6]))
+            subtotals[tempCategory][2] += float(RemoveCharacters(row[7]))
+            subtotals[tempCategory][3] += float(RemoveCharacters(row[8]))
+
+        for subtotal in subtotals:
+            column = subtotals.get(subtotal)
+
+            fee = "{:.2f}".format(column[1])
+            cost = "{:.2f}".format(column[2])
+            value = "{:.2f}".format(column[3])
+
+            weight = str(column[0])
+
+            column.clear()
+            column.append(weight)
+            column.append(fee)
+            column.append(cost)
+            column.append(value)
+
+        if subtotals["General Food"] != ["0", "0.00", "0.00", "0.00"]:
+            date = str(month) + "/01/" + str(year)
+            contents = ["General_Food"] + subtotals["General Food"] + ["0013h00000QYleGAAT"] + [date]
+            writer.writerow(contents)
+        if subtotals["General Non-Food"] != ["0", "0.00", "0.00", "0.00"]:
+            contents = ["Food, Other"] + subtotals["General Non-Food"] + ["0013h00000QYleGAAT"] + [date]
+            writer.writerow(contents)
+        if subtotals["General Produce"] != ["0", "0.00", "0.00", "0.00"]:
+            contents = ["General_Produce"] + subtotals["General Produce"] + ["0013h00000QYleGAAT"] + [date]
+            writer.writerow(contents)
+        if subtotals["Cleaning Supplies"] != ["0", "0.00", "0.00", "0.00"]:
+            contents = ["Cleaning Products"] + subtotals["Cleaning Supplies"] + ["0013h00000QYleGAAT"] + [date]
+            writer.writerow(contents)
+        if subtotals["Toiletries"] != ["0", "0.00", "0.00", "0.00"]:
+            contents = ["Toiletries"] + subtotals["Toiletries"] + ["0013h00000QYleGAAT"] + [date]
+            writer.writerow(contents)
+        if subtotals["TEFAP Food"] != ["0", "0.00", "0.00", "0.00"]:
+            contents = ["TEFAP Food"] + subtotals['TEFAP Food'] + ["0013h00000QYleGAAT"] + [date]
+            writer.writerow(contents)
+        if subtotals["TEFAP Produce"] != ["0", "0.00", "0.00", "0.00"]:
+            contents = ["TEFAP Produce"] + subtotals["TEFAP Produce"] + ["0013h00000QYleGAAT"] + [date]
+            writer.writerow(contents)
