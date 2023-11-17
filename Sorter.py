@@ -6,7 +6,7 @@ Developed by: Landon Montecalvo
 import os
 import csv
 
-directory = "C:\\Users\\ljmon\\OneDrive\\Desktop\\Tapin\\Apps\\Tapin_Algorithm"
+directory = os.path.dirname(__file__)
 
 tapinCategoriesList = {
     "01": "General Non-Food",
