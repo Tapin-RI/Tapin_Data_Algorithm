@@ -314,13 +314,13 @@ with open(GetCSV()[0], 'r') as file: # Read data in the .csv file.
 
         if subtotals["General Food"] != ["0", "0.00", "0.00", "0.00"]:
             date = str(month) + "/01/" + str(year)
-            contents = ["General_Food"] + subtotals["General Food"] + ["0013h00000QYleGAAT"] + [date]
+            contents = ["Food"] + subtotals["General Food"] + ["0013h00000QYleGAAT"] + [date]
             writer.writerow(contents)
         if subtotals["General Non-Food"] != ["0", "0.00", "0.00", "0.00"]:
             contents = ["Food, Other"] + subtotals["General Non-Food"] + ["0013h00000QYleGAAT"] + [date]
             writer.writerow(contents)
         if subtotals["General Produce"] != ["0", "0.00", "0.00", "0.00"]:
-            contents = ["General_Produce"] + subtotals["General Produce"] + ["0013h00000QYleGAAT"] + [date]
+            contents = ["Produce"] + subtotals["General Produce"] + ["0013h00000QYleGAAT"] + [date]
             writer.writerow(contents)
         if subtotals["Cleaning Supplies"] != ["0", "0.00", "0.00", "0.00"]:
             contents = ["Cleaning Products"] + subtotals["Cleaning Supplies"] + ["0013h00000QYleGAAT"] + [date]
@@ -329,8 +329,8 @@ with open(GetCSV()[0], 'r') as file: # Read data in the .csv file.
             contents = ["Toiletries"] + subtotals["Toiletries"] + ["0013h00000QYleGAAT"] + [date]
             writer.writerow(contents)
         if subtotals["TEFAP Food"] != ["0", "0.00", "0.00", "0.00"]:
-            contents = ["TEFAP Food"] + subtotals['TEFAP Food'] + ["0013h00000QYleGAAT"] + [date]
+            contents = ["Food, TEFAP"] + subtotals['TEFAP Food'] + ["0013h00000QYleGAAT"] + [date]
             writer.writerow(contents)
         if subtotals["TEFAP Produce"] != ["0", "0.00", "0.00", "0.00"]:
-            contents = ["TEFAP Produce"] + subtotals["TEFAP Produce"] + ["0013h00000QYleGAAT"] + [date]
+            contents = ["Produce, TEFAP"] + subtotals["TEFAP Produce"] + ["0013h00000QYleGAAT"] + [date]
             writer.writerow(contents)
