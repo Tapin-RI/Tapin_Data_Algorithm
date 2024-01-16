@@ -320,7 +320,7 @@ with open(GetCSV()[0], 'r') as file:  # Read data in the .csv file.
             contents = ["Produce"] + subtotals["General Produce"] + ["0013h00000QYleGAAT"] + [date]
             writer.writerow(contents)
         if subtotals["Cleaning Supplies"] != ["0", "0.00", "0.00", "0.00"]:
-            contents = ["Cleaning Products"] + subtotals["Cleaning Supplies"] + ["0013h00000QYleGAAT"] + [date]
+            contents = ["Cleaning Supplies"] + subtotals["Cleaning Supplies"] + ["0013h00000QYleGAAT"] + [date]
             writer.writerow(contents)
         if subtotals["Toiletries"] != ["0", "0.00", "0.00", "0.00"]:
             contents = ["Toiletries"] + subtotals["Toiletries"] + ["0013h00000QYleGAAT"] + [date]
