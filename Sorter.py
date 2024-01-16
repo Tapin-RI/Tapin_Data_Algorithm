@@ -76,7 +76,8 @@ totalServiceFee = 0
 totalPurchaseCost = 0
 totalValue = 0
 
-def GetCSV(): # Return all files with the .csv extension.
+
+def GetCSV():  # Return all files with the .csv extension.
     files = []
     for file in os.listdir(directory):
         if file.endswith(".csv"):
@@ -84,22 +85,25 @@ def GetCSV(): # Return all files with the .csv extension.
 
     return files
 
-def RemoveCharacters(number): # Function to remove the comma and the $ from a number.
+
+def RemoveCharacters(number):  # Function to remove the comma and the $ from a number.
     number = number.replace(",", "")
     number = number.replace("$", "")
     return number
 
-def AddMoneySign(number): # Function to add the $ to a number.
+
+def AddMoneySign(number):  # Function to add the $ to a number.
     number = "$" + str(number)
     return number
+
 
 print("REMEMBER TO REMOVE ALL FORMATTED SHEET FILES FROM THIS FOLDER WHEN DONE!!!\n")
 
 while True:
     try:
         month = int(input("MONTH NUMBER: "))
-        
-        if month > 1 and month < 13:
+
+        if 1 < month < 13:
             break
         else:
             print("\nINVALID.")
@@ -117,16 +121,18 @@ while True:
         print("\nINVALID.")
         print("PLEASE ENTER A VALID YEAR.\n")
 
-with open(GetCSV()[0], 'r') as file: # Read data in the .csv file.
+with open(GetCSV()[0], 'r') as file:  # Read data in the .csv file.
     reader = csv.reader(file)
 
     for index, value in enumerate(reader):
-        if index > 2: # Removes header rows
-            if value[0] != "Total Weight" and value[0] != "Service Fee" and value[0] != "Tap-In 113700" and value[0] != "Total \nWeight" and value[0] != " Grand Totals: " and value[0] != "Page -1 of 1": # Get rid of junk rows.
-                if (not RemoveCharacters(value[0]).isdigit()): # Remove number rows.
-                    dataRows.append(value) # Add item row to dataRows list.
+        if index > 2:  # Removes header rows
+            if value[0] != "Total Weight" and value[0] != "Service Fee" and value[0] != "Tap-In 113700" and value[
+                0] != "Total \nWeight" and value[0] != " Grand Totals: " and value[
+                0] != "Page -1 of 1":  # Get rid of junk rows.
+                if (not RemoveCharacters(value[0]).isdigit()):  # Remove number rows.
+                    dataRows.append(value)  # Add item row to dataRows list.
 
-    for index, value in enumerate(dataRows): # Lookup tapin category for each item and append it to tapinCategories.
+    for index, value in enumerate(dataRows):  # Lookup tapin category for each item and append it to tapinCategories.
         tempSplitStringType = value[2].split(" ")
         tempSplitStringCategory = value[3].split(" ")
 
@@ -139,7 +145,7 @@ with open(GetCSV()[0], 'r') as file: # Read data in the .csv file.
         # Add corresponding data from csv to one of the lists above.
         productRefs.append(value[0])
         productNames.append(value[1])
-        productTypes.append(value[2]) 
+        productTypes.append(value[2])
         productCategories.append(value[3])
         productWeights.append(value[4])
         productServiceFees.append(value[5])
@@ -184,11 +190,12 @@ with open(GetCSV()[0], 'r') as file: # Read data in the .csv file.
             "TEFAP Produce": [0, 0, 0, 0]
         }
 
-        writer.writerow(["Tap-In Category", "Product Ref", "Product Name", "Product Type", "Product Category", "Weight", "Service Fee", "Purchase Cost", "Food Bank Cost/Value"])
+        writer.writerow(["Tap-In Category", "Product Ref", "Product Name", "Product Type", "Product Category", "Weight",
+                         "Service Fee", "Purchase Cost", "Food Bank Cost/Value"])
 
         for i in range(0, len(dataRows)):
             formattedRows.append([])
-            
+
             formattedRows[i].append(tapinCategories[i])
             formattedRows[i].append(productRefs[i])
             formattedRows[i].append(productNames[i])
@@ -228,7 +235,7 @@ with open(GetCSV()[0], 'r') as file: # Read data in the .csv file.
 
         for row in formattedRows:
             writer.writerow(row)
-        
+
         writer.writerow([])
 
         if subtotals["General Food"] != ["0", "$0.00", "$0.00", "$0.00"]:
@@ -253,7 +260,8 @@ with open(GetCSV()[0], 'r') as file: # Read data in the .csv file.
             contents = ["TEFAP PRODUCE", "", "", "", ""] + subtotals["TEFAP Produce"]
             writer.writerow(contents)
 
-        grandTotalContents = ["GRAND TOTAL", "", "", "", ""] + [totalWeight, "$" + str(totalServiceFee), "$" + str(totalPurchaseCost), "$" + str(totalValue)]
+        grandTotalContents = ["GRAND TOTAL", "", "", "", ""] + [totalWeight, "$" + str(totalServiceFee),
+                                                                "$" + str(totalPurchaseCost), "$" + str(totalValue)]
         writer.writerow(grandTotalContents)
 
     fileNameSalesforce = "Food Bank Report - " + months[month] + " " + year + " SALESFORCE SHEET" + ".csv"
@@ -264,20 +272,21 @@ with open(GetCSV()[0], 'r') as file: # Read data in the .csv file.
         formattedRows = []
 
         subtotals = {
-            "General Food": [0, 0, 0, 0],
-            "General Non-Food": [0, 0, 0, 0],
-            "General Produce": [0, 0, 0, 0],
-            "Cleaning Supplies": [0, 0, 0, 0],
-            "Toiletries": [0, 0, 0, 0],
-            "TEFAP Food": [0, 0, 0, 0],
-            "TEFAP Produce": [0, 0, 0, 0]
+            "General Food": [0],
+            "General Non-Food": [0],
+            "General Produce": [0],
+            "Cleaning Supplies": [0],
+            "Toiletries": [0],
+            "TEFAP Food": [0],
+            "TEFAP Produce": [0]
         }
 
-        writer.writerow(["Goods Type", "Weight (lb)","Service Fee", "Tap-In Expense ($)", "Value", "Account", "Date Received"])
+        writer.writerow(
+            ["Goods Type", "Weight (lb)", "Account", "Date Received"])
 
         for i in range(0, len(dataRows)):
             formattedRows.append([])
-            
+
             formattedRows[i].append(tapinCategories[i])
             formattedRows[i].append(productRefs[i])
             formattedRows[i].append(productNames[i])
@@ -293,24 +302,12 @@ with open(GetCSV()[0], 'r') as file: # Read data in the .csv file.
         for row in formattedRows:
             tempCategory = row[0]
             subtotals[tempCategory][0] += float(RemoveCharacters(row[5]))
-            subtotals[tempCategory][1] += float(RemoveCharacters(row[6]))
-            subtotals[tempCategory][2] += float(RemoveCharacters(row[7]))
-            subtotals[tempCategory][3] += float(RemoveCharacters(row[8]))
 
         for subtotal in subtotals:
             column = subtotals.get(subtotal)
-
-            fee = "{:.2f}".format(column[1])
-            cost = "{:.2f}".format(column[2])
-            value = "{:.2f}".format(column[3])
-
             weight = str(column[0])
-
             column.clear()
             column.append(weight)
-            column.append(fee)
-            column.append(cost)
-            column.append(value)
 
         if subtotals["General Food"] != ["0", "0.00", "0.00", "0.00"]:
             date = str(month) + "/01/" + str(year)
