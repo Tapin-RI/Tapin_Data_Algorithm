@@ -8,6 +8,8 @@ import csv
 
 directory = os.path.dirname(__file__)
 
+FOOD_RATE = 1.93
+
 tapinCategoriesList = {
     "01": "General Non-Food",
     "02": "General Food",
@@ -117,6 +119,23 @@ while True:
         print("\nINVALID.")
         print("PLEASE ENTER A VALID YEAR.\n")
 
+while True:
+    try:
+        rate = input(f"FOOD RATE IS ${FOOD_RATE}, CORRECT? (y/n): ")
+
+        if rate.lower() == "n":
+            FOOD_RATE = float(input(f"\nPLEASE ENTER CUSTOM FOOD RATE: $"))
+            break
+        elif rate.lower() == "y":
+            break
+        else:
+            print("\nINVALID.")
+            print("PLEASE ENTER A VALID RATE.\n")
+    except ValueError:
+        print("\nINVALID.")
+        print("PLEASE ENTER A VALID RATE.\n")
+
+
 with open(GetCSV()[0], 'r') as file: # Read data in the .csv file.
     reader = csv.reader(file)
 
@@ -148,7 +167,7 @@ with open(GetCSV()[0], 'r') as file: # Read data in the .csv file.
 
     # Generate grand total for number columns.
     for weight in productWeights:
-        totalWeight += int(RemoveCharacters((weight)))
+        totalWeight += int(RemoveCharacters(weight))
     for serviceFee in productServiceFees:
         totalServiceFee += float(RemoveCharacters(serviceFee))
     for purchaseCost in productPurchaseCosts:
@@ -264,16 +283,16 @@ with open(GetCSV()[0], 'r') as file: # Read data in the .csv file.
         formattedRows = []
 
         subtotals = {
-            "General Food": [0, 0, 0, 0],
-            "General Non-Food": [0, 0, 0, 0],
-            "General Produce": [0, 0, 0, 0],
-            "Cleaning Supplies": [0, 0, 0, 0],
-            "Toiletries": [0, 0, 0, 0],
-            "TEFAP Food": [0, 0, 0, 0],
-            "TEFAP Produce": [0, 0, 0, 0]
+            "General Food": [0, 0, 0],
+            "General Non-Food": [0, 0, 0],
+            "General Produce": [0, 0, 0],
+            "Cleaning Supplies": [0, 0, 0],
+            "Toiletries": [0, 0, 0],
+            "TEFAP Food": [0, 0, 0],
+            "TEFAP Produce": [0, 0, 0]
         }
 
-        writer.writerow(["Goods Type", "Weight (lb)","Service Fee", "Tap-In Expense ($)", "Value", "Account", "Date Received"])
+        writer.writerow(["Goods Type", "Weight (lb)", "Tap-In Expense ($)", "Value", "Account", "Date Received"])
 
         for i in range(0, len(dataRows)):
             formattedRows.append([])
@@ -293,44 +312,41 @@ with open(GetCSV()[0], 'r') as file: # Read data in the .csv file.
         for row in formattedRows:
             tempCategory = row[0]
             subtotals[tempCategory][0] += float(RemoveCharacters(row[5]))
-            subtotals[tempCategory][1] += float(RemoveCharacters(row[6]))
+            subtotals[tempCategory][1] = subtotals[tempCategory][0] * FOOD_RATE
             subtotals[tempCategory][2] += float(RemoveCharacters(row[7]))
-            subtotals[tempCategory][3] += float(RemoveCharacters(row[8]))
 
         for subtotal in subtotals:
             column = subtotals.get(subtotal)
 
-            fee = "{:.2f}".format(column[1])
             cost = "{:.2f}".format(column[2])
-            value = "{:.2f}".format(column[3])
+            value = "{:.2f}".format(column[1])
 
             weight = str(column[0])
 
             column.clear()
             column.append(weight)
-            column.append(fee)
             column.append(cost)
             column.append(value)
 
-        if subtotals["General Food"] != ["0", "0.00", "0.00", "0.00"]:
+        if subtotals["General Food"] != ["0", "0.00", "0.00"]:
             date = str(month) + "/01/" + str(year)
             contents = ["Food"] + subtotals["General Food"] + ["0013h00000QYleGAAT"] + [date]
             writer.writerow(contents)
-        if subtotals["General Non-Food"] != ["0", "0.00", "0.00", "0.00"]:
+        if subtotals["General Non-Food"] != ["0", "0.00", "0.00"]:
             contents = ["Food, Other"] + subtotals["General Non-Food"] + ["0013h00000QYleGAAT"] + [date]
             writer.writerow(contents)
-        if subtotals["General Produce"] != ["0", "0.00", "0.00", "0.00"]:
+        if subtotals["General Produce"] != ["0", "0.00", "0.00"]:
             contents = ["Produce"] + subtotals["General Produce"] + ["0013h00000QYleGAAT"] + [date]
             writer.writerow(contents)
-        if subtotals["Cleaning Supplies"] != ["0", "0.00", "0.00", "0.00"]:
+        if subtotals["Cleaning Supplies"] != ["0", "0.00", "0.00"]:
             contents = ["Cleaning Supplies"] + subtotals["Cleaning Supplies"] + ["0013h00000QYleGAAT"] + [date]
             writer.writerow(contents)
-        if subtotals["Toiletries"] != ["0", "0.00", "0.00", "0.00"]:
+        if subtotals["Toiletries"] != ["0", "0.00", "0.00"]:
             contents = ["Toiletries"] + subtotals["Toiletries"] + ["0013h00000QYleGAAT"] + [date]
             writer.writerow(contents)
-        if subtotals["TEFAP Food"] != ["0", "0.00", "0.00", "0.00"]:
+        if subtotals["TEFAP Food"] != ["0", "0.00", "0.00"]:
             contents = ["Food, TEFAP"] + subtotals['TEFAP Food'] + ["0013h00000QYleGAAT"] + [date]
             writer.writerow(contents)
-        if subtotals["TEFAP Produce"] != ["0", "0.00", "0.00", "0.00"]:
+        if subtotals["TEFAP Produce"] != ["0", "0.00", "0.00"]:
             contents = ["Produce, TEFAP"] + subtotals["TEFAP Produce"] + ["0013h00000QYleGAAT"] + [date]
             writer.writerow(contents)
