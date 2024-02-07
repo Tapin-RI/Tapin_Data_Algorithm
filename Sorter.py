@@ -101,7 +101,7 @@ while True:
     try:
         month = int(input("MONTH NUMBER: "))
         
-        if month > 1 and month < 13:
+        if month > 0 and month < 13:
             break
         else:
             print("\nINVALID.")
@@ -145,7 +145,7 @@ with open(GetCSV()[0], 'r') as file: # Read data in the .csv file.
                 if (not RemoveCharacters(value[0]).isdigit()): # Remove number rows.
                     dataRows.append(value) # Add item row to dataRows list.
 
-    for index, value in enumerate(dataRows): # Lookup tapin category for each item and append it to tapinCategories.
+    for index, value in enumerate(dataRows): # Lookup tapin category for each item and append it to tapin Categories.
         tempSplitStringType = value[2].split(" ")
         tempSplitStringCategory = value[3].split(" ")
 
