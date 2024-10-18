@@ -2,6 +2,9 @@ import tkinter as tk
 import os
 import csv
 
+FOOD_RATE = 1.92 # Change this for default value.
+CURRENT_YEAR = 2024 # Change this for default year.
+
 directory = os.path.dirname(__file__)
 
 dataRows = []
@@ -14,8 +17,6 @@ productWeights = []
 productServiceFees = []
 productPurchaseCosts = []
 productValues = []
-
-
 
 tapinCategoriesList = {
     "01": "General Non-Food",
@@ -338,7 +339,7 @@ label.grid(row=0, column=0, padx=10)
 
 text_input = tk.Entry(frame, width=20)
 text_input.grid(row=0, column=1, padx=10)
-text_input.insert(0, "1.92")
+text_input.insert(0, str(FOOD_RATE))
 
 dropdown_label = tk.Label(frame, text="Select Month:")
 dropdown_label.grid(row=0, column=2, padx=10)
@@ -368,7 +369,7 @@ year_label.grid(row=0, column=4, padx=10)
 
 year_input = tk.Entry(frame, width=20)
 year_input.grid(row=0, column=5, padx=10)
-year_input.insert(0, "2024")
+year_input.insert(0, str(CURRENT_YEAR))
 
 button_frame = tk.Frame(root)
 button_frame.pack(pady=20)
