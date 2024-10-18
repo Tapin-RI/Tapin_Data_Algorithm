@@ -3,12 +3,13 @@ This csv sorting algorithm is designed for the Rode Island Food Bank donation sp
 
 Developed by: Landon Montecalvo
 """
+# TODO: Add an internet based feature that automatically uploads the necessary data to Salesforce.
 import os
 import csv
 
 directory = os.path.dirname(__file__)
 
-FOOD_RATE = 1.93
+FOOD_RATE = 1.93 # Constant should be updated upon notification that the food rate has been changed.
 
 tapinCategoriesList = {
     "01": "General Non-Food",
@@ -62,6 +63,7 @@ months = {
 }
 
 # Temporary Storage Lists
+# TODO: Rework to only the totals and remove unimportant temporary variables.
 dataRows = []
 tapinCategories = []
 productRefs = []
